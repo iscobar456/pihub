@@ -1,0 +1,11 @@
+# Virtual Environments
+pi-hub-env
+
+# Static Files
+static
+
+# Django Caches / Auto-generated
+*.pyc
+
+# Database
+db.sqlite3
