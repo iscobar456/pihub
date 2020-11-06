@@ -2,7 +2,7 @@
 pi-hub-env
 
 # Static Files
-static
+staticfiles
 
 # Django Caches / Auto-generated
 *.pyc
