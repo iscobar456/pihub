@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '0)nuund@f9a4$qh)lfqyfx2xameu*eg$mgyebof6#-#7$xm0ww'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.environ['IS_SERVER'] == 'yes' else True
+DEBUG = False if os.environ.get('IS_SERVER') == 'yes' else True
 
 ALLOWED_HOSTS = []
 
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'api',
+    'dashboard'
 ]
 
 MIDDLEWARE = [
