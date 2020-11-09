@@ -9,3 +9,6 @@ staticfiles
 
 # Database
 db.sqlite3
+
+# Sensitive Information
+project/settings_secrets.json

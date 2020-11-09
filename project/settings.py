@@ -16,6 +16,12 @@ import django_heroku, os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Set up secrets access
+import json
+secrets = json.load(
+    open(os.path.join(BASE_DIR, "project/settings_secrets.json"))
+)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -79,8 +85,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pihub',
+        'USER': 'pihub_admin',
+        'PASSWORD': secrets['database'].get('password', ''),
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

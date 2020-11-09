@@ -1,8 +1,16 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %} Home {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<h2 style="height: 400px; text-align: center;">Homepage in progress</h2>
+<header>
+    <h1>Join A Community Of Raspberry Pi Enthusiasts! ... sorta</h1>
+
+</header>
 
 {% endblock %}
