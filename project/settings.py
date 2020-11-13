@@ -34,6 +34,7 @@ DEBUG = False if os.environ.get('IS_SERVER') == 'yes' else True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/login'
 
 # Application definition
 
@@ -44,10 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'home',
     'api',
     'dashboard'
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
