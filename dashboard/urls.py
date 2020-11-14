@@ -3,4 +3,5 @@ from dashboard import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('account', views.account)
 ]

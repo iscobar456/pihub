@@ -4,4 +4,4 @@ from django.contrib.auth import authenticate
 
 class LoginForm(forms.Form):
     username = forms.CharField()
-    password = forms.PasswordInput()
+    password = forms.CharField(widget=forms.PasswordInput())
