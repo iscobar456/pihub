@@ -694,7 +694,7 @@ fieldset[disabled] .btn-success.active {
 }
 
 .btn-info {
-  background-color: #2CA8FF;
+  background-color: #254d79;
   color: #FFFFFF;
 }
 
@@ -743,12 +743,12 @@ fieldset[disabled] .btn-info:focus,
 fieldset[disabled] .btn-info.focus,
 fieldset[disabled] .btn-info:active,
 fieldset[disabled] .btn-info.active {
-  background-color: #2CA8FF;
-  border-color: #2CA8FF;
+  background-color: #254d79;
+  border-color: #254d79;
 }
 
 .btn-info.btn-link {
-  color: #2CA8FF;
+  color: #254d79;
 }
 
 .btn-info.btn-link:hover,
@@ -960,7 +960,7 @@ fieldset[disabled] .btn-neutral.active {
 }
 
 .btn-neutral.btn-info {
-  color: #2CA8FF;
+  color: #254d79;
 }
 
 .btn-neutral.btn-info:hover,
@@ -1085,8 +1085,8 @@ fieldset[disabled] .btn-neutral.active {
 }
 
 .btn-outline-info {
-  color: #2CA8FF;
-  border-color: #2CA8FF;
+  color: #254d79;
+  border-color: #254d79;
 }
 
 .btn-outline-info:hover,
@@ -1962,7 +1962,7 @@ a.text-primary:hover {
 .text-info,
 a.text-info:focus,
 a.text-info:hover {
-  color: #2CA8FF !important;
+  color: #254d79 !important;
 }
 
 .text-success,
@@ -2538,7 +2538,7 @@ a[data-toggle="collapse"][aria-expanded="true"] .caret,
 }
 
 .bg-info {
-  background-color: #2CA8FF !important;
+  background-color: #254d79 !important;
 }
 
 .bg-success {
@@ -4072,17 +4072,17 @@ Created using IcoMoon - icomoon.io
 
 .sidebar[data-color="blue"]:after,
 .off-canvas-sidebar[data-color="blue"]:after {
-  background: #2CA8FF;
+  background: #254d79;
 }
 
 .sidebar[data-color="blue"] .nav li.active>a:not([data-toggle="collapse"]),
 .off-canvas-sidebar[data-color="blue"] .nav li.active>a:not([data-toggle="collapse"]) {
-  color: #2CA8FF;
+  color: #254d79;
 }
 
 .sidebar[data-color="blue"] .nav li.active>a:not([data-toggle="collapse"]) i,
 .off-canvas-sidebar[data-color="blue"] .nav li.active>a:not([data-toggle="collapse"]) i {
-  color: #2CA8FF;
+  color: #254d79;
 }
 
 .sidebar[data-color="green"]:after,
@@ -4208,8 +4208,9 @@ Created using IcoMoon - icomoon.io
   padding-bottom: 45px;
   background: #141E30;
   /* fallback for old browsers */
-  background: -webkit-gradient(linear, left top, right top, from(#0c2646), color-stop(60%, #204065), to(#2a5788));
-  background: linear-gradient(to right, #0c2646 0%, #204065 60%, #2a5788 100%);
+  background: -webkit-gradient(linear, left top, right top, from(#2b2b2b), color-stop(60%, #3c3c3c), to(#6f6f6f));
+  background: linear-gradient(to right, #0c2646 0%, #254d79 60%, #254d79 100%);
+  background: linear-gradient(to right, #2b2b2b 0%, #3c3c3c 60%, #6f6f6f 100%);
   position: relative;
   overflow: hidden;
 }
@@ -4378,7 +4379,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .fixed-plugin .badge-blue {
-  background-color: #2CA8FF;
+  background-color: #254d79;
 }
 
 .fixed-plugin .badge-green {
@@ -4660,7 +4661,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .card[data-background-color="blue"] {
-  background-color: #2CA8FF;
+  background-color: #254d79;
 }
 
 .card[data-background-color="green"] {

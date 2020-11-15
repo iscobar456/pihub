@@ -29,7 +29,7 @@ def personal(request):
     context = {
         
     }
-    return render(request, 'dashboard/social.html')
+    return render(request, 'dashboard/personal.html')
 
 
 @login_required

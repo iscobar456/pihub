@@ -40,13 +40,13 @@
 
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="yellow">
+    <div class="sidebar" data-color="blue">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
       <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-          pH
+        <a href="/dashboard" class="simple-text logo-mini">
+          <img src="{% static '/images/logo.png' %}" alt="logo"/>
         </a>
         <a href="http://www.creative-tim.com" class="simple-text logo-normal">
           PiHub
@@ -54,24 +54,36 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li id="dashboard-link">
             <a href="/dashboard">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li>
+          <li id="social-link">
             <a href="/dashboard/social">
               <i class="fas fa-people-arrows"></i>
               <p>Others</p>
             </a>
           </li>
-          <li>
+          <li id="personal-link">
             <a href="/dashboard/personal">
               <i class="fas fa-male"></i>
               <p>Personal</p>
             </a>
           </li>
+          <script>
+            var page = 'dashboard';
+            var pagePath = window.location.pathname.split("/");
+            pagePath.shift();
+            pagePath.shift();
+            console.log(pagePath)
+            if (pagePath[0]) {
+              page = pagePath[0];
+            }
+            var activeLink = document.getElementById(page + "-link");
+            activeLink.classList.add("active")
+          </script>
         </ul>
       </div>
     </div>
@@ -87,7 +99,7 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="#pablo">Dashboard</a>
+            <p class="navbar-brand">Welcome, {{ request.user.first_name  }}</p>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -128,7 +140,7 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#pablo">
+                <a class="nav-link" href="/dashboard/account">
                   <i class="now-ui-icons users_single-02"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Account</span>
