@@ -10,7 +10,7 @@ def device_call(func):
             user = get_object_or_404(User, username=request.POST.get('username'))
 
             request_hash = hashlib.sha256()
-            request_hash.update(request.POST.get('username'))
+            request_hash.update(request.POST.get('pubkey'))
             request_hash.update(request.POST.get('time'))
             request_hash.update(user.secret_key)
             hash_string = request_hash.hexdigest()

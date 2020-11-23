@@ -4,10 +4,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 
-class DeviceAPIForm(forms.ModelForm):
-    class Meta:
-        model = Device
-        fields = ['hostname']
 
 class DeviceForm(forms.ModelForm):
     class Meta:
