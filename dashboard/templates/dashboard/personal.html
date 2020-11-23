@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title"> Simple Table</h4>
+                    <h4 class="card-title">Your Devices</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -18,109 +18,63 @@
                             <thead class=" text-primary">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Country</th>
-                                    <th>City</th>
-                                    <th class="text-right">Salary</th>
+                                    <th>IP Address</th>
+                                    <th>Is Live</th>
+                                    <th>Keys</th>
+                                    <th class="text-right">Last Update</th>
                                 </tr>
                             </thead>
                         <tbody>
+                            {% if devices %}
+                                {% for device in devices %}
+                                    <tr>
+                                        <td>{{ device.name }}</td>
+
+                                        {% if device.ip_address %}
+                                            <td>{{ device.ip_address }}</td>
+                                        {% else %}
+                                            <td>Not yet set up</td>
+                                        {% endif %}
+
+                                        {% if device.is_live %}
+                                            <td>
+                                                <i class="text-success now-ui-icons ui-1_check"></i>
+                                            </td>
+                                        {% elif device.is_live == False%}
+                                            <td>
+                                                <i class="text-danger now-ui-icons ui-1_simple-remove"></i>
+                                            </td>
+                                        {% else %}
+                                            <td>?</td>
+                                        {% endif %}
+
+                                        <td>
+                                            <button
+                                              class="btn btn-outline-default btn-round btn-sm"
+                                              data-toggle="modal"
+                                              data-target="#keysModal"
+                                              data-name="{{ device.name }}"
+                                              data-pubkey="{{ device.public_key }}"
+                                              data-privkey="{{ device.private_key }}">
+
+                                                View Keys <i class="now-ui-icons objects_key-25"></i>
+                                            </button>
+                                        </td>
+                                        
+                                        <td class="text-right">{{ device.updated_at }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td>No Devices</td>
+                                </tr>
+                            {% endif %}
                             <tr>
-                                <td>
-                                    Dakota Rice
+                                <td colspan="5">
+                                    <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#newDeviceModal">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
                                 </td>
-                                <td>
-                                    Niger
-                                </td>
-                                <td>
-                                    Oud-Turnhout
-                                </td>
-                                <td class="text-right">
-                                    $36,738
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    Minerva Hooper
-                                </td>
-                                <td>
-                                    Curaçao
-                                </td>
-                                <td>
-                                    Sinaai-Waas
-                                </td>
-                                <td class="text-right">
-                                    $23,789
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    Sage Rodriguez
-                                </td>
-                                <td>
-                                    Netherlands
-                                </td>
-                                <td>
-                                    Baileux
-                                </td>
-                                <td class="text-right">
-                                    $56,142
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    Philip Chaney
-                                </td>
-                                <td>
-                                    Korea, South
-                                </td>
-                                <td>
-                                    Overland Park
-                                </td>
-                                <td class="text-right">
-                                    $38,735
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    Doris Greene
-                                </td>
-                                <td>
-                                    Malawi
-                                </td>
-                                <td>
-                                    Feldkirchen in Kärnten
-                                </td>
-                                <td class="text-right">
-                                    $63,542
-                                </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                Mason Porter
-                            </td>
-                            <td>
-                                Chile
-                            </td>
-                            <td>
-                                Gloucester
-                            </td>
-                            <td class="text-right">
-                                $78,615
-                            </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                Jon Porter
-                            </td>
-                            <td>
-                                Portugal
-                            </td>
-                            <td>
-                                Gloucester
-                            </td>
-                            <td class="text-right">
-                                $98,615
-                            </td>
                             </tr>
                         </tbody>
                         </table>
@@ -130,5 +84,84 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="newDeviceModal" tabindex="-1" role="dialog" aria-labelledby="newDeviceModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form method="POST" action="/dashboard/personal/add-device">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newDeviceModalLabel">New Device</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="device-name">Name</label>
+                    <input type="text" name="name" class="form-control" id="device-name">
+                    {{ new_device_form.name.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="device-description">Description</label>
+                    <textarea name="description" class="form-control" id="device-description" rows="2"></textarea>
+                    {{ new_device_form.description.errors }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="keysModal" tabindex="-1" role="dialog" aria-labelledby="keysModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="keysModalLabel"><span class="device-name"></span>'s Keys</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Public Key</label>
+                <p class="form-control p-2 public-key"></p>
+            </div>
+            <div class="form-group">
+                <label>Private Key</label>
+                <p class="form-control p-2 private-key"></p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script>
+    var hasModalErrors = "{{ has_errors }}"
+    window.onload = function () {
+        if (hasModalErrors == 'yes') {
+            $('#newDeviceModal').modal('show')
+        }
+        $("#keysModal").on("show.bs.modal", function(event) {
+            var modal = $(this);
+            var button = $(event.relatedTarget);
+            var name = modal.find(".device-name");
+            var publicKey = modal.find(".public-key");
+            var privateKey = modal.find(".private-key");
+            name.text(button.data("name"));
+            publicKey.text(button.data("pubkey"));
+            privateKey.text(button.data("privkey"));
+        })
+    }
+
+</script>
 
 {% endblock content %}

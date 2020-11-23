@@ -51,6 +51,10 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+.nav-content .links .toggle {
+    display: none;
+}
+
 .nav-content .links a {
     font-size: 1.2rem;
     padding: 0 .5rem;
@@ -79,6 +83,12 @@ h1, h2, h3, h4, h5, h6 {
     border-color: #bfffd7;
     color: #bfffd7;
     cursor: pointer;
+}
+
+@media (max-width: 650px) {
+    .nav-content .links {
+        flex-direction: column;
+    }
 }
 
 /* PAGE CONTENT STYLES */

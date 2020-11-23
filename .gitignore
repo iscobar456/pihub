@@ -1,5 +1,5 @@
 # Virtual Environments
-pi-hub-env
+virtual
 
 # Static Files
 staticfiles
@@ -12,3 +12,6 @@ db.sqlite3
 
 # Sensitive Information
 project/settings_secrets.json
+
+# Other
+.vscode

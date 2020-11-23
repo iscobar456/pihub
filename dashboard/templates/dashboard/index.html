@@ -28,28 +28,27 @@
                                 <th class="text-right">Status</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                    Dakota Rice
-                                    </td>
-                                    <td>
-                                    Niger
-                                    </td>
-                                    <td class="text-right">
-                                    $36,738
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    Minerva Hooper
-                                    </td>
-                                    <td>
-                                    Curaçao
-                                    </td>
-                                    <td class="text-right">
-                                    $23,789
-                                    </td>
-                                </tr>
+                                {% if devices %}
+                                    {% for device in devices %}
+                                        <tr>
+                                            <td>
+                                            Dakota Rice
+                                            </td>
+                                            <td>
+                                            Niger
+                                            </td>
+                                            <td class="text-right">
+                                            $36,738
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td>
+                                        No Devices
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>

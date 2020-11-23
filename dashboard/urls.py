@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.index),
     path('social', views.social),
     path('personal', views.personal),
-    path('account', views.account)
+    path('personal/<str:action>', views.personal),
+    path('account', views.Account.as_view())
 ]

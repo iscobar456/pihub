@@ -1,15 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.views.decorators.http import require_POST
 from django.contrib.auth.views import login_required
 from django.utils.decorators import method_decorator
+from django.views import View
+from django.http import HttpResponse
 from home.model_forms import UserForm
+from dashboard.forms import EditAccountForm, DeviceForm
+from dashboard.models import Device
+import json
+import secrets
+import traceback
 
 # Create your views here.
 
 @login_required
 def index(request):
 
+    devices = Device.objects.filter(owner=request.user)
+
     context = {
-        
+        'devices': devices
     }
     return render(request, 'dashboard/index.html')
 
@@ -24,17 +34,78 @@ def social(request):
 
 
 @login_required
-def personal(request):
-    
+def personal(request, action=None):
+    devices = Device.objects.filter(owner=request.user)
     context = {
-        
+        'devices': devices,
+        'new_device_form': DeviceForm(),
+        'has_errors': 'no'
     }
-    return render(request, 'dashboard/personal.html')
+
+    def add_device():
+        form = DeviceForm(request.POST)
+
+        try:
+            device = form.save(commit=False)
+            device.owner = request.user
+            device.public_key = secrets.token_hex(16)
+            device.private_key = secrets.token_hex(32)
+            device.save()
+        except:
+            traceback.print_exc()
+            context['has_errors'] = 'yes'
+            context['new_device_form'] = form
+
+        return render(request, 'dashboard/personal.html', context)
 
 
-@login_required
-def account(request):
-    if request.method == 'POST':
-        pass
-    
-    return render(request, 'dashboard/account.html')
+    def get_keys():
+        device = get_object_or_404(Device, id=request.GET.get('d'))
+        response = json.dumps({
+            'name': device.name,
+            'keys': {
+                'public': device.public_key,
+                'private': device.private_key
+            }
+        })
+        return HttpResponse(response)
+
+    if action == 'add-device' and request.method == "POST":
+        return add_device()
+    elif action == 'get-keys':
+        return get_keys()
+
+    return render(request, 'dashboard/personal.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+class Account(View):
+
+    def get(self, request):
+        form = EditAccountForm()
+        context = {
+            'form': form,
+            'success': False,
+            'saving_error': False
+        }
+        return render(request, 'dashboard/account.html', context)
+
+    def post(self, request):
+        form = EditAccountForm(request.POST)
+        context = {
+            'form': form,
+            'success': False,
+            'saving_error': False
+        }
+        if form.is_valid():
+            try:
+                u = UserForm(request.POST, instance=form.user)
+                user = u.save(commit=False)
+                # Save other fields not included in UserForm
+
+                user.save()
+                context['success'] = True
+            except:
+                context['saving_error'] = True
+        
+        return render(request, 'dashboard/account.html', context)
