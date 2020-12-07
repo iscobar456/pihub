@@ -128,12 +128,14 @@
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label>Public Key</label>
-                <p class="form-control p-2 public-key"></p>
+                <h6 class="ml-2 my-1">Public Key</h6>
+                <p class="form-control border border-dark p-2 mb-0 text-secondary public-key" onclick="copyKey(this)"></p>
+                <small class="ml-2 mb-4">Click to copy to clipboard</small>
             </div>
             <div class="form-group">
-                <label>Private Key</label>
-                <p class="form-control p-2 private-key"></p>
+                <h6 class="ml-2 my-1">Private Key</h6>
+                <p class="form-control border border-dark p-2 mb-0 text-secondary private-key" onclick="copyKey(this)"></p>
+                <small class="ml-2 mb-4">Click to copy to clipboard</small>
             </div>
         </div>
         <div class="modal-footer">
@@ -161,7 +163,15 @@
             privateKey.text(button.data("privkey"));
         })
     }
-
+    function copyKey(keyElement) {
+        keyElement.nextElementSibling.classList.add('text-success')
+        keyElement.nextElementSibling.innerHTML = "Copied to clipboard.";
+        window.navigator.clipboard.writeText(keyElement.innerHTML);
+        setTimeout(() => {
+            keyElement.nextElementSibling.classList.remove('text-success');
+            keyElement.nextElementSibling.innerHTML = "Click to copy to clipboard.";
+        }, 1600);
+    }
 </script>
 
 {% endblock content %}
