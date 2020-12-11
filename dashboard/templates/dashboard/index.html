@@ -31,20 +31,14 @@
                                 {% if devices %}
                                     {% for device in devices %}
                                         <tr>
-                                            <td>
-                                            Dakota Rice
-                                            </td>
-                                            <td>
-                                            Niger
-                                            </td>
-                                            <td class="text-right">
-                                            $36,738
-                                            </td>
+                                            <td>{{ device.name }}</td>
+                                            <td>{{ device.ip_address }}</td>
+                                            <td class="text-right">{{ device.is_live }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td>
+                                        <td colspan="3">
                                         No Devices
                                         </td>
                                     </tr>
@@ -54,7 +48,7 @@
                     </div>
                 </div>
                 <div class="card-footer ">
-                    <a href="/dashboard/social/requests">View all</a>
+                    <a href="/dashboard/personal">View all</a>
                 </div>
             </div>
         </div>
