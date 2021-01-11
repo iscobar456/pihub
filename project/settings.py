@@ -137,5 +137,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# if not DEBUG:
+#     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS
+AWS_ACCESS_KEY_ID = secrets['aws']['public_key']
+AWS_SECRET_ACCESS_KEY = secrets['aws']['secret_key']
+AWS_STORAGE_BUCKET_NAME = "pihub-django"
+AWS_QUERYSTRING_AUTH = False
+
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

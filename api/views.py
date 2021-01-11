@@ -32,7 +32,6 @@ def verify_device(request):
 def device_update(request):
     if not verify_data(request):
         return HttpResponse('Request could not be verified, make sure your information is correct.', status=401)
-
     device = get_object_or_404(Device, public_key=request.POST.get("public_key"))
     device.ip_address = request.META.get('REMOTE_ADDR')
     device.hostname = request.META.get('REMOTE_HOST')

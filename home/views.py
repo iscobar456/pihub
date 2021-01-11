@@ -5,6 +5,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from home.forms import LoginForm
 from home.model_forms import UserForm
+from dashboard.models import Profile
 
 # Create your views here.
 
@@ -58,6 +59,8 @@ class Register(View):
         form = UserForm(request.POST)
         if form.is_valid():
             user = form.save()
+            p = Profile(user=user)
+            p.save()
             login(request, user)
             return HttpResponseRedirect('/dashboard')
         else:

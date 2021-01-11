@@ -19,6 +19,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>IP Address</th>
+                                    <th>Notes</th>
                                     <th>Is Live</th>
                                     <th>Keys</th>
                                     <th class="text-right">Last Update</th>
@@ -35,6 +36,19 @@
                                         {% else %}
                                             <td>Not yet set up</td>
                                         {% endif %}
+
+                                        <td>
+                                            <button
+                                              class="btn btn-outline-default btn-round btn-sm"
+                                              data-toggle="modal"
+                                              data-target="#notesModal"
+                                              data-name="{{ device.name }}"
+                                              data-device-ID="{{ device.id }}"
+                                              data-notes="{{ device.notes }}"
+                                              data-markdown-enabled="{{ device.markdown_enabled_string }}">
+                                                    <i class="now-ui-icons text_align-left"></i>
+                                            </button>
+                                        </td>
 
                                         {% if device.is_live %}
                                             <td>
@@ -66,11 +80,11 @@
                                 {% endfor %}
                             {% else %}
                                 <tr>
-                                    <td colspan="5">No Devices</td>
+                                    <td colspan="6">No Devices</td>
                                 </tr>
                             {% endif %}
                             <tr>
-                                <td colspan="5">
+                                <td colspan="6">
                                     <button class="btn btn-primary btn-round" data-toggle="modal" data-target="#newDeviceModal">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -145,9 +159,50 @@
   </div>
 </div>
 
+<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notesModalLabel"><span class="device-name"></span>'s Notes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="markdown">Markdown Enabled?</label>
+                    <input type="checkbox" name="markdown" id="markdown" class="markdown-enabled form-control">
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" value="">
+                        Markdown
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <textarea name="notes" id="notes" class="notes form-control" placeholder="This device..."></textarea>
+                </div>
+                {% if updated_notes %}
+                <small class="text-success">Successfully updated notes.</small>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Exit</button>
+                <button type="button" class="btn btn-primary notes-submit">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script>
-    var hasModalErrors = "{{ has_errors }}"
+    var hasModalErrors = "{{ has_errors }}";
+    var updatedNotes = "{{ updated_notes }}";
     window.onload = function () {
         if (hasModalErrors == 'yes') {
             $('#newDeviceModal').modal('show')
@@ -161,7 +216,20 @@
             name.text(button.data("name"));
             publicKey.text(button.data("pubkey"));
             privateKey.text(button.data("privkey"));
-        })
+        });
+        if (updatedNotes == 'yes') {
+            $('#notesModal').modal('show')
+        }
+        $("#notesModal").on("show.bs.modal", function(event) {
+            var modal = $(this);
+            var button = $(event.relatedTarget);
+            var name = modal.find(".device-name");
+            var notes = modal.find(".notes");
+            var markdownEnabled = button.data("markdown-enabled");
+            var markdownEnabledInput = modal.find(".markdown-enabled");
+            name.text(button.data("name"));
+            notes.text(button.data("notes"));
+        });
     }
     function copyKey(keyElement) {
         keyElement.nextElementSibling.classList.add('text-success')
@@ -172,6 +240,25 @@
             keyElement.nextElementSibling.innerHTML = "Click to copy to clipboard.";
         }, 1600);
     }
+    function updateNotes(data) {
+        var notesReq = new XMLHttpRequest();
+        notesReq.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                window.location = "/dashboard/personal";
+            }
+        }
+        notesReq.open("POST", "/dashboard/update-notes");
+        notesReq.setRequestHeader("X-CSRFToken", Cookies.get('csrftoken'));
+        notesReq.send(JSON.stringify({
+            device_id: "{{ device.id }}",
+            notes: data.notes,
+            markdown_enabled: data.markdownEnabled
+        }))
+    }
 </script>
 
 {% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+{% endblock %}

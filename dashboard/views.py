@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.http import HttpResponse
 from home.model_forms import UserForm
-from dashboard.forms import EditAccountForm, DeviceForm
+from dashboard.forms import EditAccountForm, DeviceForm, UpdateNotesForm
 from dashboard.models import Device
 import json
 import secrets
@@ -78,6 +78,17 @@ def personal(request, action=None):
     return render(request, 'dashboard/personal.html', context)
 
 
+@require_POST
+def update_notes(request):
+    form = UpdateNotesForm(request.POST)
+    if form.is_valid():
+        form.device.notes = form.cleaned_data.get('notes')
+        form.device.markdown_enabled = form.cleaned_data.get('markdown_enabled')
+        form.device.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
+
 @method_decorator(login_required, name='dispatch')
 class Account(View):
 
@@ -91,21 +102,36 @@ class Account(View):
         return render(request, 'dashboard/account.html', context)
 
     def post(self, request):
-        form = EditAccountForm(request.POST)
+        print("check 1")
+        form = EditAccountForm(request.POST, request.FILES)
         context = {
+            'user': request.user,
             'form': form,
             'success': False,
             'saving_error': False
         }
         if form.is_valid():
+            print("check 2")
             try:
-                u = UserForm(request.POST, instance=form.user)
-                user = u.save(commit=False)
-                # Save other fields not included in UserForm
-
+                user = form.user
+                user.first_name = form.cleaned_data.get('first_name')
+                user.last_name = form.cleaned_data.get('last_name')
+                user.username = form.cleaned_data.get('username')
+                user.email = form.cleaned_data.get('email')
+                if form.cleaned_data.get('password'):
+                    user.set_password(form.cleaned_data.get('password'))
                 user.save()
+
+                profile = user.profile
+                profile.bio = form.cleaned_data.get('bio')
+                if form.files.get("picture"):
+                    profile.picture = form.files.get("picture")
+                profile.save()
+
                 context['success'] = True
+                context['user'] = user
             except:
+                traceback.print_exc()
                 context['saving_error'] = True
         
         return render(request, 'dashboard/account.html', context)
