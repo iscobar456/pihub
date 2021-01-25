@@ -10,7 +10,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title"> Simple Table</h4>
+                    <h4 class="card-title">Friends</h4>
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addFriendModal">Add Friend</button>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -18,110 +19,36 @@
                             <thead class=" text-primary">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Country</th>
-                                    <th>City</th>
-                                    <th class="text-right">Salary</th>
+                                    <th>Profile</th>
+                                    <th>Devices</th>
+                                    <th class="text-right">Remove</th>
                                 </tr>
                             </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    Dakota Rice
-                                </td>
-                                <td>
-                                    Niger
-                                </td>
-                                <td>
-                                    Oud-Turnhout
-                                </td>
-                                <td class="text-right">
-                                    $36,738
-                                </td>
-                                </tr>
+                            {% if friends %}
+                                {% for friend in friends %}
                                 <tr>
-                                <td>
-                                    Minerva Hooper
-                                </td>
-                                <td>
-                                    Curaçao
-                                </td>
-                                <td>
-                                    Sinaai-Waas
-                                </td>
-                                <td class="text-right">
-                                    $23,789
-                                </td>
+                                    <td>{{ friend.get_full_name }}</td>
+                                    <td>
+                                        <button
+                                          class="btn btn-secondary"
+                                          data-toggle="modal"
+                                          data-target="#profileModal"
+                                          onclick="loadProfile('{{ friend.id }}')">
+                                            View Profile
+                                        </button>
+                                    </td>
+                                    <td>devices</td>
+                                    <td class="text-right">
+                                        <a href="/dashboard/remove-friend/{{ friend.id }}"><i class="now-ui-icons ui-1_simple-remove text-danger pr-3"></i></a>
+                                    </td>
                                 </tr>
+                                {% endfor %}
+                            {% else %}
                                 <tr>
-                                <td>
-                                    Sage Rodriguez
-                                </td>
-                                <td>
-                                    Netherlands
-                                </td>
-                                <td>
-                                    Baileux
-                                </td>
-                                <td class="text-right">
-                                    $56,142
-                                </td>
+                                    <td colspan="3">No friends :(</td>
                                 </tr>
-                                <tr>
-                                <td>
-                                    Philip Chaney
-                                </td>
-                                <td>
-                                    Korea, South
-                                </td>
-                                <td>
-                                    Overland Park
-                                </td>
-                                <td class="text-right">
-                                    $38,735
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>
-                                    Doris Greene
-                                </td>
-                                <td>
-                                    Malawi
-                                </td>
-                                <td>
-                                    Feldkirchen in Kärnten
-                                </td>
-                                <td class="text-right">
-                                    $63,542
-                                </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                Mason Porter
-                            </td>
-                            <td>
-                                Chile
-                            </td>
-                            <td>
-                                Gloucester
-                            </td>
-                            <td class="text-right">
-                                $78,615
-                            </td>
-                            </tr>
-                            <tr>
-                            <td>
-                                Jon Porter
-                            </td>
-                            <td>
-                                Portugal
-                            </td>
-                            <td>
-                                Gloucester
-                            </td>
-                            <td class="text-right">
-                                $98,615
-                            </td>
-                            </tr>
+                            {% endif %}
                         </tbody>
                         </table>
                     </div>
@@ -131,4 +58,83 @@
     </div>
 </div>
 
+<div class="modal fade" id="addFriendModal" tabindex="-1" role="dialog" aria-labelledby="addFriendModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" id="add-friend-form">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFriendModalLabel">Add Friend</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="friend-username">Username</label>
+                        <input type="text" name="friend" class="form-control" id="friend-username">
+                        <small class="text-danger" id="add-friend-error"></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addFriend()">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="profile-container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script>
+    window.onload = function () {
+        var addFriendForm = document.getElementById("add-friend-form");
+        addFriendForm.onsubmit = function () {
+            return false;
+        }
+    }
+    function addFriend() {
+        var form = document.getElementById("add-friend-form");
+        var formError = document.getElementById("add-friend-error");
+        formError.innerHTML = "";
+        var username = document.getElementById("friend-username").value;
+        var friendReq = new XMLHttpRequest();
+        friendReq.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status != 200) {
+                    formError.innerHTML = this.responseText;
+                } else {
+                    window.location = window.location;
+                }
+            }
+        }
+        friendReq.open("POST", "/dashboard/add-friend");
+        friendReq.setRequestHeader("X-CSRFToken", Cookies.get("csrftoken"));
+        friendReq.send(new FormData(form));
+    }
+    function loadProfile(friendID) {
+        var profileContainer = document.getElementById("profile-container");
+        profileContainer.innerHTML = "";
+        var pReq = new XMLHttpRequest();
+        pReq.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                profileContainer.innerHTML = this.response;
+            }
+        }
+        pReq.open("GET", "/dashboard/profile-card/" + friendID);
+        pReq.send();
+    }
+</script>
+{% endblock %}

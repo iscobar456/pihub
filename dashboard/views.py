@@ -3,10 +3,11 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.views import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from home.model_forms import UserForm
 from dashboard.forms import EditAccountForm, DeviceForm, UpdateNotesForm
-from dashboard.models import Device
+from dashboard.models import Device, SocialConnection
+from django.contrib.auth.models import User
 import json
 import secrets
 import traceback
@@ -26,12 +27,52 @@ def index(request):
 
 @login_required
 def social(request):
-    
+    user = request.user
+    connections = SocialConnection.objects.filter(connectees=user)
+    friends = list(map(lambda connection : connection.connectees.exclude(id=user.id).first(), connections))
+    print(friends)
     context = {
-        
+        'friends': friends,
     }
-    return render(request, 'dashboard/social.html')
+    return render(request, 'dashboard/social.html', context)
 
+
+@login_required
+def remove_friend(request, friend_id):
+    try:
+        user = request.user
+        connections = SocialConnection.objects.filter(connectees=user).filter(connectees=friend_id)
+        connections.delete()
+        return HttpResponseRedirect("/dashboard/social")
+    except:
+        traceback.print_exc()
+        return HttpResponse(status=500)
+
+
+@login_required
+@require_POST
+def add_friend(request):
+    try:
+        user = request.user
+        friend = get_object_or_404(User, username=request.POST.get("friend"))
+        if not SocialConnection.objects.filter(conn_type="FR").filter(connectees=user).filter(connectees=friend):
+            connection = SocialConnection()
+            connection.save()
+            connection.connectees.add(user)
+            connection.connectees.add(friend)
+            connection.save()
+            return HttpResponse()
+        else:
+            return HttpResponse("Already friends with this user.", status=400)
+    except Http404:
+        return HttpResponse("Could not find user.", status=400)
+    except:
+        traceback.print_exc()
+        return HttpResponse("Could not find user.", status=500)
+
+
+def get_profile_card(request, friend_id):
+    return render(request, "dashboard/profile-card.html", context={"user": get_object_or_404(User, id=friend_id)})
 
 @login_required
 def personal(request, action=None):
@@ -135,3 +176,4 @@ class Account(View):
                 context['saving_error'] = True
         
         return render(request, 'dashboard/account.html', context)
+

@@ -28,3 +28,15 @@ class Profile(models.Model):
         return f"profile_pictures/{self.user.username}/{file_name}"
 
     picture = models.ImageField(upload_to=get_picture_path, null=True)
+
+
+class SocialConnection(models.Model):
+    connectees = models.ManyToManyField(User)
+
+    CONNECTION_OPTIONS = (
+        ("FR", "Friend"),
+        # More may be added in the future.
+    )
+    conn_type = models.CharField(max_length=2, default="FR", choices=CONNECTION_OPTIONS)
+
+    created_at = models.DateTimeField(auto_now_add=True)
