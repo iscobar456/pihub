@@ -11,6 +11,7 @@ class Device(models.Model):
     owner = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     ip_address = models.CharField(blank=True, max_length=64)
     is_live = models.BooleanField(null=True)
+    is_public = models.BooleanField(default=False)
     public_key = models.CharField(blank=True, max_length=32)
     private_key = models.CharField(blank=True, max_length=64)
     hostname = models.CharField(blank=True, max_length=64)
