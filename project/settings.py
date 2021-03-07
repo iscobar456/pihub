@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pihub',
         'USER': 'pihub_admin',
-        'PASSWORD': secrets['database'].get('password', '') if DEBUG else os.environ['DB_PASSWORD'],
+        'PASSWORD': secrets['database'].get('password', ''),
         'HOST': 'localhost',
         'PORT': '5432'
     }
