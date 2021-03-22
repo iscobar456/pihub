@@ -1,0 +1,33 @@
+.content {
+    display: grid;
+    grid-template: 1fr 400px 2fr / 1fr minmax(200px, 350px) 1fr;
+    width: 100%;
+}
+
+.welcome-content {
+    display: grid;
+    grid-template-rows:  repeat(4, 1fr);
+    grid-area: 2 / 2 / 3 / 3;
+    background-color: burlywood;
+    border: 8px #5d452e ridge;
+}
+
+.welcome-content h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-content a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    background-color: chocolate;
+    border-top: 7px #5d452e groove;
+}
+
+.welcome-content a:hover {
+    background-color: chartreuse;
+}
