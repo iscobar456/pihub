@@ -12,17 +12,18 @@ from dashboard.models import Profile
 def homepage(request):
 
     context = {
-
+        'login_form': LoginForm(),
+        'register_form': UserForm(),
     }
     return render(request, 'index.html', context)
 
 class Login(View):
     def get(self, request):
-
         context = {
-            'form': LoginForm()
+            'login_form': LoginForm(),
+            'register_form': UserForm(),
         }
-        return render(request, 'login.html', context)
+        return render(request, 'index.html', context)
     
     def post(self, request):
         form = LoginForm(request.POST)
@@ -32,29 +33,40 @@ class Login(View):
                 login(request, user)
                 return HttpResponseRedirect('/dashboard')
             else:
+                print("no user found")
                 context = {
-                    'form': form,
+                    'login_form': LoginForm(),
+                    'register_form': UserForm(),
                     'no_user_found': True
                 }
         else:
             context = {
-                'form': form,
+                'login_form': LoginForm(),
+                'register_form': UserForm(),
                 'no_user_found': False
             }
-        return render(request, 'login.html', context)
+        return render(request, 'index.html', context)
 
 class Register(View):
     
     def get(self, request):
         context = {
-            'form': UserForm()
+            'login_form': LoginForm(),
+            'register_form': UserForm(),
+            'focus_signup': True
         }
-        return render(request, 'register.html', context)
+        return render(request, 'index.html', context)
     
     def post(self, request):
         context = {
-            'form': UserForm()
+            'login_form': LoginForm(),
+            'register_form': UserForm(),
+            'focus_signup': True
         }
+
+        if request.POST.get('password') != request.POST.get('password_confirm'):
+            context['different_passwords'] = True
+            return render(request, 'index.html', context)
 
         form = UserForm(request.POST)
         if form.is_valid():
@@ -64,6 +76,7 @@ class Register(View):
             login(request, user)
             return HttpResponseRedirect('/dashboard')
         else:
-            errors = form.errors
-            context['form'] = form
-            return render(request, 'register.html', context)
+            print("form not valid")
+            print(form.errors)
+            context['register_form'] = form
+            return render(request, 'index.html', context)
