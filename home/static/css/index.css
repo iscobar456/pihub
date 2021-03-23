@@ -20,7 +20,7 @@
 .portal {
     position: absolute;
     width: 339px;
-    height: 476px;
+    min-height: 476px;
     left: 120px;
     top: 90px;
     z-index: 5;
@@ -146,6 +146,7 @@ form button {
     margin-left: auto;
     display: block;
     margin-right: 1.5em;
+    margin-bottom: 1.5em;
     font-family: 'Montserrat', sans-serif;
     cursor: pointer;
 }

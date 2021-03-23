@@ -22,17 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0)nuund@f9a4$qh)lfqyfx2xameu*eg$mgyebof6#-#7$xm0ww'
 
+# Set up secrets access
+import json
+secrets = json.load(
+    open(os.path.join(BASE_DIR, "project/settings_secrets.json"))
+)
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.environ.get('IS_SERVER') == 'yes' else True
+DEBUG = secrets["debug"]
 
-if DEBUG:
-    # Set up secrets access
-    import json
-    secrets = json.load(
-        open(os.path.join(BASE_DIR, "project/settings_secrets.json"))
-    )
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pihub.site', 'pihub.isaacspencer.site']
 
 LOGIN_URL = '/login'
 
@@ -128,3 +127,4 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'

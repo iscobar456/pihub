@@ -3,6 +3,7 @@ virtual
 
 # Static Files
 staticfiles
+static
 
 # Django Caches / Auto-generated
 *.pyc
