@@ -19,9 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0)nuund@f9a4$qh)lfqyfx2xameu*eg$mgyebof6#-#7$xm0ww'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False if os.environ.get('IS_SERVER') == 'yes' else True
 
@@ -31,6 +28,9 @@ if DEBUG:
     secrets = json.load(
         open(os.path.join(BASE_DIR, "project/settings_secrets.json"))
     )
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = secrets['secret_key']
 
 ALLOWED_HOSTS = []
 
