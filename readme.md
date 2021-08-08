@@ -1,2 +1,2 @@
 # pihub
-All things raspberry pi for iscy and the peeps🤩
+A website to keep track of devices with potentially changing IP addresses, a Raspberry Pi in my case.
