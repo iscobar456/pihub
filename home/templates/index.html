@@ -11,7 +11,67 @@
 <div class="content">
     <div class="portal-container">
         <div class="portal">
-
+            <div class="action-selector">
+                <a href="#" id="signin-anchor" onclick="switchForm('signin-form')" class="active">Sign In</a>
+                <a href="#" id="signup-anchor" onclick="switchForm('signup-form')">Sign Up</a>
+            </div>
+            <div class="signin-form">
+                <form action="/login" method="POST">
+                    {% csrf_token %}
+                    {% if no_user_found %}
+                        <p class="nuf-text">Incorrect username or password.</p>
+                    {% endif %}
+                    <div class="input-group">
+                        <label for="signin-username">Username:</label>
+                        <input type="text" name="username" id="signin-username">
+                        <small>{{ login_form.username.errors }}</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="signin-password">Password:</label>
+                        <input type="password" name="password" id="signin-password">
+                        <small>{{ login_form.password.errors }}</small>
+                    </div>
+                    <button type="submit">Sign In</button>
+                </form>
+            </div>
+            <div class="signup-form hidden-form">
+                <form action="/register" method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <label for="register-first-name">First Name:</label>
+                        <input type="text" name="first_name" id="register-first-name">
+                        <small>{{ register_form.first_name.errors }}</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-last-name">Last Name:</label>
+                        <input type="text" name="last_name" id="register-last-name">
+                        <small>{{ register_form.first_name.errors }}</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email">Email:</label>
+                        <input type="text" name="email" id="register-email">
+                        <small>{{ register_form.first_name.errors }}</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-username">Username:</label>
+                        <input type="text" name="username" id="register-username">
+                        <small>{{ register_form.username.errors }}</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password">Password:</label>
+                        <input type="password" name="password" id="register-password">
+                        <small>{{ register_form.password.errors }}</small>
+                        {% if different_passwords %}
+                        <small><ul>The passwords do not match</ul></small>
+                        {% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password-confirm">Confirm Password:</label>
+                        <input type="password" name="password_confirm" id="register-password-confirm">
+                    </div>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
         </div>
         <div class="background-card-1"></div>
         <div class="background-card-2"></div>
@@ -19,5 +79,30 @@
         <div class="background-card-4"></div>
     </div>
 </div>
+
+<script>
+    function switchForm(formID) {
+        var signinAnchor = document.querySelector("#signin-anchor");
+        var signupAnchor = document.querySelector("#signup-anchor");
+        var signinForm = document.querySelector(".signin-form");
+        var signupForm = document.querySelector(".signup-form");
+
+        if (formID == "signup-form") {
+            signinAnchor.classList.remove("active");
+            signupAnchor.classList.add("active");
+            signinForm.classList.add("hidden-form");
+            signupForm.classList.remove("hidden-form");
+        } else {
+            signupAnchor.classList.remove("active");
+            signinAnchor.classList.add("active");
+            signupForm.classList.add("hidden-form");
+            signinForm.classList.remove("hidden-form");
+        }
+        return false;
+    }
+    {% if focus_signup %}
+        switchForm("signup-form");
+    {% endif %}
+</script>
 
 {% endblock %}

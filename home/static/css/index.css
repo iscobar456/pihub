@@ -20,7 +20,7 @@
 .portal {
     position: absolute;
     width: 339px;
-    height: 476px;
+    min-height: 476px;
     left: 120px;
     top: 90px;
     z-index: 5;
@@ -79,4 +79,134 @@
     background: #E1ECF3;
     border-radius: 10px;
     transform: rotate(72deg);
+}
+
+.action-selector {
+    display: flex;
+    justify-content: center;
+    margin: 1.8em auto;
+}
+
+.action-selector a {
+    color: #000000;
+    text-decoration: none;
+    font-size: larger;
+    font-family: 'Montserrat', sans-serif;
+    padding: .4rem .55rem;
+    margin: 0 .2em;
+}
+
+.active {
+    border-bottom: 1px solid #000000;
+}
+
+.input-group {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.5em;
+}
+
+.signup-form .input-group {
+    padding: .3em 1.5em;
+}
+
+.input-group label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .9em;
+    color:rgb(104, 104, 104);
+}
+
+.input-group input {
+    width: 100%;
+    padding-top: .4em;
+    border: none;
+    border-bottom: 1px solid black;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.input-group input:active {
+    border-bottom: 1px solid rgb(114, 114, 114);
+}
+
+.input-group ul {
+    color: red;
+    font-size: smaller;
+    list-style: none;
+    padding: 0;
+    margin: 3px 0;
+}
+
+form button {
+    padding: .4em .6em;
+    background-color: #E1ECF3;
+    border-radius: 6px;
+    border: none;
+    margin-left: auto;
+    display: block;
+    margin-right: 1.5em;
+    margin-bottom: 1.5em;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+}
+
+.nuf-text {
+    text-align: center;
+    color: red;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hidden-form {
+    display: none;
+}
+
+
+@media (max-width: 600px) {
+    .portal-container {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        align-items: center;
+    }
+
+    .portal {
+        width: 100%;
+        top: auto;
+        left: auto;
+    }
+
+    .background-card-1 {
+        height: 526px;
+        width: 100%;
+        top: auto;
+        left: auto;
+        transform: none;
+    }
+
+    .background-card-2 {
+        height: 576px;
+        width: 100%;
+        top: auto;
+        left: auto;
+        transform: none;
+    }
+
+    .background-card-3 {
+        height: 626px;
+        width: 100%;
+        top: auto;
+        left: auto;
+        transform: none;
+        display: none;
+    }
+
+    .background-card-4 {
+        height: 676px;
+        width: 100%;
+        top: auto;
+        left: auto;
+        transform: none;
+        display: none;
+    }
 }

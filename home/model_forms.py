@@ -7,8 +7,6 @@ from django.contrib.auth.hashers import make_password
 
 class UserForm(forms.ModelForm):
 
-    password_confirm = forms.CharField(widget=forms.PasswordInput())
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password']
